@@ -1,0 +1,502 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="{% block meta_description %}Professional car dealership in Kenya - Kai and Karo. Buy, sell, and rent new and used cars.{% endblock %}">
+    <meta name="keywords" content="cars, kenya, car dealer, used cars, new cars, car rental, nairobi">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% if page_title %}{{ page_title }}{% else %}Kai and Karo - Your Trusted Car Dealer{% endif %}{% endblock %}</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <!-- CSS Styles -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/elegant-icons/0.0.1/elegant-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/ui-lightness/jquery-ui.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/SlickNav/1.0.10/slicknav.min.css" rel="stylesheet">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <style>
+        /* Custom styles to match your original template */
+        :root {
+            --primary-color: #ff6b35;
+            --secondary-color: #2c3e50;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f8f9fa;
+        }
+        
+        .primary-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .primary-btn:hover {
+            background-color: #e55a30;
+            color: white;
+        }
+        
+        .site-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .site-btn:hover {
+            background-color: #e55a30;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title span {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 15px 0;
+        }
+        
+        .header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header__top {
+            background-color: var(--bg-light);
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .car__item {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .car__item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .car__item__pic__slider img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .spad {
+            padding: 100px 0;
+        }
+        
+        .set-bg {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        /* Messages styling */
+        .messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+        
+        .alert {
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        
+        /* Loading overlay */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            z-index: 9998;
+        }
+        
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Page Preloader -->
+    <div id="preloder" style="display: none;">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin fa-3x text-primary"></i>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Offcanvas Menu Begin -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">
+                <img src="{% static 'img/logo.png' %}" alt="Kai and Karo" style="height: 40px;">
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="offcanvas__widget mb-4">
+                <a href="#" class="btn btn-outline-primary me-2"><i class="fa fa-heart"></i></a>
+                <a href="#" class="btn btn-outline-primary me-2"><i class="fa fa-search"></i></a>
+                <a href="{% url 'cars:contact' %}" class="primary-btn">Contact Us</a>
+            </div>
+            <nav class="offcanvas__menu">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'cars:home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'cars:car_list' %}">Cars</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'cars:about' %}">About Us</a></li>
+                            <li><a class="dropdown-item" href="{% url 'cars:contact' %}">Contact</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'cars:about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'cars:contact' %}">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="offcanvas__contact mt-4">
+                <ul class="list-unstyled">
+                    <li><i class="fa fa-clock"></i> Week day: 08:00 am to 18:00 pm</li>
+                    <li><i class="fa fa-envelope"></i> info@kaiandkaro.co.ke</li>
+                    <li><i class="fa fa-phone"></i> (+254) 700 123 456</li>
+                </ul>
+                <div class="offcanvas__social mt-3">
+                    <a href="#" class="me-2"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="me-2"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Offcanvas Menu End -->
+
+    <!-- Header Section Begin -->
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-7">
+                        <ul class="header__top__widget list-unstyled d-flex mb-0">
+                            <li class="me-4"><i class="fa fa-clock me-1"></i> Week day: 08:00 am to 18:00 pm</li>
+                            <li><i class="fa fa-envelope me-1"></i> info@kaiandkaro.co.ke</li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="header__top__right d-flex align-items-center justify-content-end">
+                            <div class="header__top__phone me-4">
+                                <i class="fa fa-phone me-1"></i>
+                                <span>(+254) 700 123 456</span>
+                            </div>
+                            <div class="header__top__social">
+                                <a href="#" class="me-2"><i class="fab fa-facebook"></i></a>
+                                <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'cars:home' %}">
+                    <img src="{% static 'img/logo.png' %}" alt="Kai and Karo" style="height: 50px;">
+                </a>
+                
+                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
+                               href="{% url 'cars:home' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'car' in request.resolver_match.url_name %}active{% endif %}" 
+                               href="{% url 'cars:car_list' %}">Cars</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Blog</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'cars:about' %}">About Us</a></li>
+                                <li><a class="dropdown-item" href="{% url 'cars:contact' %}">Contact</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" 
+                               href="{% url 'cars:about' %}">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" 
+                               href="{% url 'cars:contact' %}">Contact</a>
+                        </li>
+                    </ul>
+                    
+                    <div class="navbar-nav">
+                        <div class="nav-item d-flex align-items-center">
+                            <a href="#" class="nav-link me-2"><i class="fa fa-heart"></i></a>
+                            <a href="#" class="nav-link me-3" data-bs-toggle="modal" data-bs-target="#searchModal">
+                                <i class="fa fa-search"></i>
+                            </a>
+                            <a href="{% url 'cars:contact' %}" class="primary-btn">Contact Us</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- Header Section End -->
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Footer Section Begin -->
+    <footer class="footer bg-dark text-light py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="footer__about">
+                        <div class="footer__logo mb-3">
+                            <img src="{% static 'img/footer-logo.png' %}" alt="Kai and Karo" style="height: 60px;">
+                        </div>
+                        <p class="mb-3">Your trusted car dealer in Kenya. We specialize in new cars, foreign used cars, local used cars, and car rentals. Visit our showroom in Nairobi or contact us today.</p>
+                        <div class="footer__social">
+                            <a href="#" class="text-light me-3 fs-4"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="text-light me-3 fs-4"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-light me-3 fs-4"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-light fs-4"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <div class="footer__widget">
+                        <h5 class="text-white mb-3">Information</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="#" class="text-light text-decoration-none"><i class="fa fa-angle-right me-2"></i>Purchase</a></li>
+                            <li class="mb-2"><a href="#" class="text-light text-decoration-none"><i class="fa fa-angle-right me-2"></i>Payment</a></li>
+                            <li class="mb-2"><a href="#" class="text-light text-decoration-none"><i class="fa fa-angle-right me-2"></i>Shipping</a></li>
+                            <li class="mb-2"><a href="#" class="text-light text-decoration-none"><i class="fa fa-angle-right me-2"></i>Returns</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <div class="footer__widget">
+                        <h5 class="text-white mb-3">Car Types</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="#" class="text-light text-decoration-none"><i class="fa fa-angle-right me-2"></i>Hatchback</a></li>
+                            <li class="mb-2"><a href="#" class="text-light text-decoration-none"><i class="fa fa-angle-right me-2"></i>Sedan</a></li>
+                            <li class="mb-2"><a href="#" class="text-light text-decoration-none"><i class="fa fa-angle-right me-2"></i>SUV</a></li>
+                            <li class="mb-2"><a href="#" class="text-light text-decoration-none"><i class="fa fa-angle-right me-2"></i>Crossover</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12 mb-4">
+                    <div class="footer__contact">
+                        <h5 class="text-white mb-3">Contact Info</h5>
+                        <div class="footer__contact__info">
+                            <div class="mb-3">
+                                <i class="fa fa-map-marker-alt me-3 text-primary"></i>
+                                <span>Mombasa Road, Nairobi, Kenya</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fa fa-phone me-3 text-primary"></i>
+                                <span>(+254) 700 123 456</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fa fa-envelope me-3 text-primary"></i>
+                                <span>info@kaiandkaro.co.ke</span>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fa fa-clock me-3 text-primary"></i>
+                                <span>Mon-Fri: 8:00 AM - 6:00 PM<br>Sat: 9:00 AM - 4:00 PM</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="footer__copyright text-center">
+                <p class="mb-0">&copy; <script>document.write(new Date().getFullYear());</script> Kai and Karo. All rights reserved. | Developed with <i class="fa fa-heart text-primary"></i> in Kenya</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Search Modal -->
+    <div class="modal fade" id="searchModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">Search Cars</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{% url 'cars:car_list' %}" method="get">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control form-control-lg" 
+                                   placeholder="Search for cars, brands, models..." value="{{ request.GET.search }}">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fa fa-search"></i> Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/SlickNav/1.0.10/jquery.slicknav.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize carousels
+            $('.owl-carousel').owlCarousel({
+                loop: true,
+                margin: 10,
+                nav: true,
+                autoplay: true,
+                autoplayTimeout: 5000,
+                responsive: {
+                    0: { items: 1 },
+                    600: { items: 2 },
+                    1000: { items: 3 }
+                }
+            });
+
+            // Auto-hide messages after 5 seconds
+            setTimeout(function() {
+                $('.alert').fadeOut();
+            }, 5000);
+
+            // Loading overlay functions
+            window.showLoading = function() {
+                $('.loading-overlay').show();
+            };
+
+            window.hideLoading = function() {
+                $('.loading-overlay').hide();
+            };
+
+            // AJAX for brand/model dependency
+            $('select[name="brand"]').change(function() {
+                var brandId = $(this).val();
+                var modelSelect = $('select[name="model"]');
+                
+                if (brandId) {
+                    showLoading();
+                    $.ajax({
+                        url: '{% url "cars:models_by_brand" %}',
+                        data: { 'brand_id': brandId },
+                        success: function(data) {
+                            modelSelect.empty();
+                            modelSelect.append('<option value="">Select Model</option>');
+                            $.each(data.models, function(index, model) {
+                                modelSelect.append('<option value="' + model.id + '">' + model.name + '</option>');
+                            });
+                            hideLoading();
+                        },
+                        error: function() {
+                            hideLoading();
+                        }
+                    });
+                } else {
+                    modelSelect.empty();
+                    modelSelect.append('<option value="">Select Model</option>');
+                }
+            });
+
+            // Price range slider (if using jQuery UI)
+            if ($('.price-range').length) {
+                $('.price-range').slider({
+                    range: true,
+                    min: 0,
+                    max: 10000000,
+                    values: [0, 10000000],
+                    slide: function(event, ui) {
+                        $('#amount').val('KSh ' + ui.values[0].toLocaleString() + ' - KSh ' + ui.values[1].toLocaleString());
+                    }
+                });
+                $('#amount').val('KSh 0 - KSh 10,000,000');
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
