@@ -62,7 +62,7 @@ def home_view(request):
         'meta_description': 'Browse our extensive collection of new and used cars. Foreign imports, local vehicles, and rental options available.',
     }
     
-    return render(request, 'cars/home.html', context)
+    return render(request, 'home.html', context)
 
 
 def car_list_view(request):
