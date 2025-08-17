@@ -195,22 +195,22 @@
             <div class="offcanvas__widget mb-4">
                 <a href="#" class="btn btn-outline-primary me-2"><i class="fa fa-heart"></i></a>
                 <a href="#" class="btn btn-outline-primary me-2"><i class="fa fa-search"></i></a>
-                <a href="{% url 'cars:contact' %}" class="primary-btn">Contact Us</a>
+                <a href="{% url 'contact' %}" class="primary-btn">Contact Us</a>
             </div>
             <nav class="offcanvas__menu">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="{% url 'cars:home' %}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'cars:car_list' %}">Cars</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'car_list' %}">Cars</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'cars:about' %}">About Us</a></li>
-                            <li><a class="dropdown-item" href="{% url 'cars:contact' %}">Contact</a></li>
+                            <li><a class="dropdown-item" href="{% url 'about' %}">About Us</a></li>
+                            <li><a class="dropdown-item" href="{% url 'contact' %}">Contact</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'cars:about' %}">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'cars:contact' %}">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
                 </ul>
             </nav>
             <div class="offcanvas__contact mt-4">
@@ -260,7 +260,7 @@
         </div>
         <nav class="navbar navbar-expand-lg navbar-light">
             <div class="container">
-                <a class="navbar-brand" href="{% url 'cars:home' %}">
+                <a class="navbar-brand" href="{% url 'home' %}">
                     <img src="{% static 'img/logo.png' %}" alt="Kai and Karo" style="height: 50px;">
                 </a>
                 
@@ -272,11 +272,11 @@
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" 
-                               href="{% url 'cars:home' %}">Home</a>
+                               href="{% url 'home' %}">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if 'car' in request.resolver_match.url_name %}active{% endif %}" 
-                               href="{% url 'cars:car_list' %}">Cars</a>
+                               href="{% url 'car_list' %}">Cars</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Blog</a>
@@ -284,17 +284,17 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Pages</a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{% url 'cars:about' %}">About Us</a></li>
-                                <li><a class="dropdown-item" href="{% url 'cars:contact' %}">Contact</a></li>
+                                <li><a class="dropdown-item" href="{% url 'about' %}">About Us</a></li>
+                                <li><a class="dropdown-item" href="{% url 'contact' %}">Contact</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" 
-                               href="{% url 'cars:about' %}">About</a>
+                               href="{% url 'about' %}">About</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" 
-                               href="{% url 'cars:contact' %}">Contact</a>
+                               href="{% url 'contact' %}">Contact</a>
                         </li>
                     </ul>
                     
@@ -304,7 +304,7 @@
                             <a href="#" class="nav-link me-3" data-bs-toggle="modal" data-bs-target="#searchModal">
                                 <i class="fa fa-search"></i>
                             </a>
-                            <a href="{% url 'cars:contact' %}" class="primary-btn">Contact Us</a>
+                            <a href="{% url 'contact' %}" class="primary-btn">Contact Us</a>
                         </div>
                     </div>
                 </div>
@@ -400,7 +400,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="{% url 'cars:car_list' %}" method="get">
+                    <form action="{% url 'car_list' %}" method="get">
                         <div class="input-group">
                             <input type="text" name="search" class="form-control form-control-lg" 
                                    placeholder="Search for cars, brands, models..." value="{{ request.GET.search }}">
@@ -461,7 +461,7 @@
                 if (brandId) {
                     showLoading();
                     $.ajax({
-                        url: '{% url "cars:models_by_brand" %}',
+                        url: '{% url "models_by_brand" %}',
                         data: { 'brand_id': brandId },
                         success: function(data) {
                             modelSelect.empty();

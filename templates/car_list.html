@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ page_title }}{% endblock %}
+{% block meta_description %}{{ meta_description }}{% endblock %}
+
+{% block content %}
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Car Listing</h2>
+                        <div class="breadcrumb__links">
+                            <a href="{% url 'cars:home' %}"><i class="fa fa-home"></i> Home</a>
+                            <span>Cars</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Car Section Begin -->
+    <section class="car spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="car__sidebar">
+                        <div class="car__search">
+                            <h5>Car Search</h5>
+                            <form method="get" action="{% url 'cars:car_list' %}">
+                                {% for key, value in current_filters.items %}
+                                    {% if key != 'search' and key != 'page' %}
+                                        <input type="hidden" name="{{ key }}" value="{{ value }}">
+                                    {% endif %}
+                                {% endfor %}
+                                <input type="text" name="search" placeholder="Search..." value="{{ current_filters.search }}">
+                                <button type="submit"><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+                        <div class="car__filter">
+                            <h5>Car Filter</h5>
+                            <form method="get" action="{% url 'cars:car_list' %}">
+                                <select name="brand" onchange="this.form.submit()">
+                                    <option value="">Select Brand</option>
+                                    {% for brand in brands %}
+                                        <option value="{{ brand.id }}" {% if current_filters.brand == brand.id|stringformat:"s" %}selected{% endif %}>
+                                            {{ brand.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                
+                                <select name="model" onchange="this.form.submit()">
+                                    <option value="">Select Model</option>
+                                    {% for model in models %}
+                                        {% if not current_filters.brand or model.brand_id|stringformat:"s" == current_filters.brand %}
+                                            <option value="{{ model.id }}" {% if current_filters.model == model.id|stringformat:"s" %}selected{% endif %}>
+                                                {{ model.name }}
+                                            </option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                
+                                <select name="availability" onchange="this.form.submit()">
+                                    <option value="">Availability</option>
+                                    <option value="sale" {% if current_filters.availability == 'sale' %}selected{% endif %}>For Sale</option>
+                                    <option value="rent" {% if current_filters.availability == 'rent' %}selected{% endif %}>For Rent</option>
+                                </select>
+                                
+                                <select name="condition" onchange="this.form.submit()">
+                                    <option value="">Condition</option>
+                                    <option value="excellent" {% if current_filters.condition == 'excellent' %}selected{% endif %}>Excellent</option>
+                                    <option value="very_good" {% if current_filters.condition == 'very_good' %}selected{% endif %}>Very Good</option>
+                                    <option value="good" {% if current_filters.condition == 'good' %}selected{% endif %}>Good</option>
+                                    <option value="fair" {% if current_filters.condition == 'fair' %}selected{% endif %}>Fair</option>
+                                </select>
+                                
+                                <select name="transmission" onchange="this.form.submit()">
+                                    <option value="">Transmission</option>
+                                    <option value="manual" {% if current_filters.transmission == 'manual' %}selected{% endif %}>Manual</option>
+                                    <option value="automatic" {% if current_filters.transmission == 'automatic' %}selected{% endif %}>Automatic</option>
+                                    <option value="cvt" {% if current_filters.transmission == 'cvt' %}selected{% endif %}>CVT</option>
+                                    <option value="hybrid" {% if current_filters.transmission == 'hybrid' %}selected{% endif %}>Hybrid</option>
+                                </select>
+                                
+                                <select name="mileage" onchange="this.form.submit()">
+                                    <option value="">Mileage</option>
+                                    <option value="10" {% if current_filters.mileage == '10' %}selected{% endif %}>Under 10,000 km</option>
+                                    <option value="15" {% if current_filters.mileage == '15' %}selected{% endif %}>Under 15,000 km</option>
+                                    <option value="20" {% if current_filters.mileage == '20' %}selected{% endif %}>Under 20,000 km</option>
+                                    <option value="25" {% if current_filters.mileage == '25' %}selected{% endif %}>Under 25,000 km</option>
+                                    <option value="27" {% if current_filters.mileage == '27' %}selected{% endif %}>Under 27,000 km</option>
+                                </select>
+                                
+                                <select name="fuel_type" onchange="this.form.submit()">
+                                    <option value="">Fuel Type</option>
+                                    <option value="petrol" {% if current_filters.fuel_type == 'petrol' %}selected{% endif %}>Petrol</option>
+                                    <option value="diesel" {% if current_filters.fuel_type == 'diesel' %}selected{% endif %}>Diesel</option>
+                                    <option value="hybrid" {% if current_filters.fuel_type == 'hybrid' %}selected{% endif %}>Hybrid</option>
+                                    <option value="electric" {% if current_filters.fuel_type == 'electric' %}selected{% endif %}>Electric</option>
+                                    <option value="lpg" {% if current_filters.fuel_type == 'lpg' %}selected{% endif %}>LPG</option>
+                                </select>
+                                
+                                <select name="color" onchange="this.form.submit()">
+                                    <option value="">Colors</option>
+                                    {% for color in colors %}
+                                        <option value="{{ color }}" {% if current_filters.color == color %}selected{% endif %}>
+                                            {{ color|title }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                
+                                <div class="filter-price">
+                                    <p>Price:</p>
+                                    <div class="price-range-wrap">
+                                        <div class="filter-price-range"></div>
+                                        <div class="range-slider">
+                                            <div class="price-input">
+                                                <input type="text" id="filterAmount" readonly>
+                                                <input type="hidden" name="min_price" id="min_price" value="{{ current_filters.min_price }}">
+                                                <input type="hidden" name="max_price" id="max_price" value="{{ current_filters.max_price }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="car__filter__btn">
+                                    <a href="{% url 'cars:car_list' %}" class="site-btn">Reset Filter</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="car__filter__option">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="car__filter__option__item">
+                                    <h6>Show On Page</h6>
+                                    <form method="get" action="{% url 'cars:car_list' %}" style="display: inline;">
+                                        {% for key, value in current_filters.items %}
+                                            {% if key != 'per_page' and key != 'page' %}
+                                                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                                            {% endif %}
+                                        {% endfor %}
+                                        <select name="per_page" onchange="this.form.submit()">
+                                            <option value="9" {% if current_filters.per_page == '9' or not current_filters.per_page %}selected{% endif %}>9 Cars</option>
+                                            <option value="15" {% if current_filters.per_page == '15' %}selected{% endif %}>15 Cars</option>
+                                            <option value="20" {% if current_filters.per_page == '20' %}selected{% endif %}>20 Cars</option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="car__filter__option__item car__filter__option__item--right">
+                                    <h6>Sort By</h6>
+                                    <form method="get" action="{% url 'cars:car_list' %}" style="display: inline;">
+                                        {% for key, value in current_filters.items %}
+                                            {% if key != 'sort' and key != 'page' %}
+                                                <input type="hidden" name="{{ key }}" value="{{ value }}">
+                                            {% endif %}
+                                        {% endfor %}
+                                        <select name="sort" onchange="this.form.submit()">
+                                            <option value="-selling_price" {% if current_filters.sort == '-selling_price' %}selected{% endif %}>Price: Highest First</option>
+                                            <option value="selling_price" {% if current_filters.sort == 'selling_price' %}selected{% endif %}>Price: Lowest First</option>
+                                            <option value="-year" {% if current_filters.sort == '-year' %}selected{% endif %}>Year: Newest First</option>
+                                            <option value="year" {% if current_filters.sort == 'year' %}selected{% endif %}>Year: Oldest First</option>
+                                            <option value="mileage" {% if current_filters.sort == 'mileage' %}selected{% endif %}>Mileage: Low to High</option>
+                                            <option value="-mileage" {% if current_filters.sort == '-mileage' %}selected{% endif %}>Mileage: High to Low</option>
+                                            <option value="-created_at" {% if current_filters.sort == '-created_at' or not current_filters.sort %}selected{% endif %}>Latest Added</option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if cars %}
+                        <div class="row">
+                            {% for car in cars %}
+                            <div class="col-lg-4 col-md-4">
+                                <div class="car__item">
+                                    <div class="car__item__pic__slider owl-carousel">
+                                        {% for image in car.images.all %}
+                                            <img src="{{ image.image.url }}" alt="{{ car.title }}">
+                                        {% empty %}
+                                            <img src="{% static 'img/cars/default-car.jpg' %}" alt="{{ car.title }}">
+                                        {% endfor %}
+                                    </div>
+                                    <div class="car__item__text">
+                                        <div class="car__item__text__inner">
+                                            <div class="label-date">{{ car.year }}</div>
+                                            <h5><a href="{{ car.get_absolute_url }}">{{ car.brand.name }} {{ car.car_model.name }}</a></h5>
+                                            <ul>
+                                                <li><span>{{ car.mileage|floatformat:0 }}</span> km</li>
+                                                <li>{{ car.get_transmission_display }}</li>
+                                                <li><span>{{ car.horsepower }}</span> hp</li>
+                                            </ul>
+                                        </div>
+                                        <div class="car__item__price">
+                                            {% if car.is_for_rent and car.is_for_sale %}
+                                                <span class="car-option">Rent/Sale</span>
+                                                <h6>KSh {{ car.monthly_rent_estimate|floatformat:0|default:"Contact" }}<span>/Month</span></h6>
+                                                <small>or KSh {{ car.final_price|floatformat:0 }} to buy</small>
+                                            {% elif car.is_for_rent %}
+                                                <span class="car-option">For Rent</span>
+                                                <h6>KSh {{ car.monthly_rent_estimate|floatformat:0|default:"Contact" }}<span>/Month</span></h6>
+                                            {% else %}
+                                                <span class="car-option sale">For Sale</span>
+                                                <h6>KSh {{ car.final_price|floatformat:0 }}</h6>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Pagination -->
+                        {% if page_obj.has_other_pages %}
+                        <div class="pagination__option">
+                            {% if page_obj.has_previous %}
+                                <a href="?{% for key, value in current_filters.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page=1">&laquo; First</a>
+                                <a href="?{% for key, value in current_filters.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">Previous</a>
+                            {% endif %}
+                            
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if page_obj.number == num %}
+                                    <a href="#" class="active">{{ num }}</a>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <a href="?{% for key, value in current_filters.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                                <a href="?{% for key, value in current_filters.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">Next</a>
+                                <a href="?{% for key, value in current_filters.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="text-center py-5">
+                                    <h4>No cars found</h4>
+                                    <p>Sorry, we couldn't find any cars matching your criteria. Please try adjusting your filters.</p>
+                                    <a href="{% url 'cars:car_list' %}" class="site-btn">View All Cars</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Car Section End -->
+
+    <!-- JavaScript for price range slider -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize price range slider
+            const priceRange = {{ price_range|safe }};
+            const currentMinPrice = {{ current_filters.min_price|default:priceRange.min_price }};
+            const currentMaxPrice = {{ current_filters.max_price|default:priceRange.max_price }};
+            
+            // Update filter amount display
+            const filterAmount = document.getElementById('filterAmount');
+            if (filterAmount) {
+                filterAmount.value = `KSh ${currentMinPrice.toLocaleString()} - KSh ${currentMaxPrice.toLocaleString()}`;
+            }
+            
+            // Handle price range changes (you would implement this with your chosen slider library)
+            // This is a placeholder for the actual price range slider implementation
+        });
+    </script>
+{% endblock %}

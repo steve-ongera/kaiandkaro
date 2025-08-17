@@ -198,7 +198,8 @@ def car_list_view(request):
         'meta_description': 'Browse our complete inventory of cars for sale and rent.',
     }
     
-    return render(request, 'cars/car_list.html', context)
+    return render(request, 'car_list.html', context)
+
 
 
 def car_detail_view(request, slug):

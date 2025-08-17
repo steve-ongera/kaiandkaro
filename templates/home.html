@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load custom_filters %}
 {% block title %}{{ page_title }}{% endblock %}
 {% block meta_description %}{{ meta_description }}{% endblock %}
 
@@ -30,10 +30,10 @@
                         </div>
                         {% endif %}
                         <div class="mt-4">
-                            <a href="{% url 'cars:test_drive' %}" class="btn btn-warning btn-lg me-3">
+                            <a href="#" class="btn btn-warning btn-lg me-3">
                                 <i class="fa fa-car me-2"></i>Test Drive
                             </a>
-                            <a href="{% url 'cars:car_list' %}" class="btn btn-outline-light btn-lg">Learn More</a>
+                            <a href="{% url 'car_list' %}" class="btn btn-outline-light btn-lg">Learn More</a>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,7 @@
                             <div class="tab-pane fade show active" id="rental-tab" role="tabpanel">
                                 <div class="hero__tab__form">
                                     <h4 class="mb-4">Find Your Rental Car</h4>
-                                    <form action="{% url 'cars:car_list' %}" method="get">
+                                    <form action="{% url 'car_list' %}" method="get">
                                         <input type="hidden" name="availability" value="rent">
                                         <div class="row g-3">
                                             <div class="col-12">
@@ -95,7 +95,7 @@
                             <div class="tab-pane fade" id="purchase-tab" role="tabpanel">
                                 <div class="hero__tab__form">
                                     <h4 class="mb-4">Buy Your Dream Car</h4>
-                                    <form action="{% url 'cars:car_list' %}" method="get">
+                                    <form action="{% url 'car_list' %}" method="get">
                                         <input type="hidden" name="availability" value="sale">
                                         <div class="row g-3">
                                             <div class="col-12">
@@ -164,7 +164,7 @@
                         </div>
                         <h5 class="mb-3">Car Rental</h5>
                         <p class="text-muted">Daily, weekly, and monthly car rental services with competitive rates and quality vehicles.</p>
-                        <a href="{% url 'cars:car_list' %}?availability=rent" class="btn btn-outline-primary">
+                        <a href="{% url 'car_list' %}?availability=rent" class="btn btn-outline-primary">
                             <i class="fa fa-arrow-right"></i>
                         </a>
                     </div>
@@ -176,7 +176,7 @@
                         </div>
                         <h5 class="mb-3">Car Sales</h5>
                         <p class="text-muted">Wide selection of new and used cars from trusted brands with financing options available.</p>
-                        <a href="{% url 'cars:car_list' %}?availability=sale" class="btn btn-outline-primary">
+                        <a href="{% url 'car_list' %}?availability=sale" class="btn btn-outline-primary">
                             <i class="fa fa-arrow-right"></i>
                         </a>
                     </div>
@@ -188,7 +188,7 @@
                         </div>
                         <h5 class="mb-3">Car Maintenance</h5>
                         <p class="text-muted">Professional maintenance and repair services to keep your vehicle in excellent condition.</p>
-                        <a href="{% url 'cars:contact' %}" class="btn btn-outline-primary">
+                        <a href="{% url 'contact' %}" class="btn btn-outline-primary">
                             <i class="fa fa-arrow-right"></i>
                         </a>
                     </div>
@@ -200,7 +200,7 @@
                         </div>
                         <h5 class="mb-3">24/7 Support</h5>
                         <p class="text-muted">Round-the-clock customer support for all your automotive needs and emergencies.</p>
-                        <a href="{% url 'cars:contact' %}" class="btn btn-outline-primary">
+                        <a href="{% url 'contact' %}" class="btn btn-outline-primary">
                             <i class="fa fa-arrow-right"></i>
                         </a>
                     </div>
@@ -225,8 +225,8 @@
                             <p>Whether you're looking for a reliable family car, a luxury vehicle, or need short-term rental solutions, we have the expertise and inventory to meet your needs.</p>
                         </div>
                         <div class="feature__text__btn">
-                            <a href="{% url 'cars:about' %}" class="btn btn-primary me-3">About Us</a>
-                            <a href="{% url 'cars:contact' %}" class="btn btn-outline-primary">Contact Us</a>
+                            <a href="{% url 'about' %}" class="btn btn-primary me-3">About Us</a>
+                            <a href="{% url 'contact' %}" class="btn btn-outline-primary">Contact Us</a>
                         </div>
                     </div>
                 </div>
@@ -347,7 +347,7 @@
                         {% empty %}
                         <div class="col-12 text-center">
                             <p class="text-muted">No featured cars available at the moment.</p>
-                            <a href="{% url 'cars:car_list' %}" class="btn btn-primary">Browse All Cars</a>
+                            <a href="{% url 'car_list' %}" class="btn btn-primary">Browse All Cars</a>
                         </div>
                         {% endfor %}
                     </div>
@@ -392,7 +392,7 @@
                         {% empty %}
                         <div class="col-12 text-center">
                             <p class="text-muted">No latest cars available at the moment.</p>
-                            <a href="{% url 'cars:car_list' %}" class="btn btn-primary">Browse All Cars</a>
+                            <a href="{% url 'car_list' %}" class="btn btn-primary">Browse All Cars</a>
                         </div>
                         {% endfor %}
                     </div>
@@ -418,7 +418,7 @@
                             <li class="mb-3"><i class="fa fa-check-circle text-success me-3"></i> Flexible financing options and rental terms available</li>
                             <li class="mb-3"><i class="fa fa-check-circle text-success me-3"></i> Expert customer service and after-sales support</li>
                         </ul>
-                        <a href="{% url 'cars:about' %}" class="btn btn-primary">About Us</a>
+                        <a href="{% url 'about' %}" class="btn btn-primary">About Us</a>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -491,7 +491,7 @@
                             <div>
                                 <h4 class="mb-3">Do You Want To Buy A Car?</h4>
                                 <p class="mb-3">Browse our extensive collection of quality vehicles with competitive pricing</p>
-                                <a href="{% url 'cars:car_list' %}?availability=sale" class="btn btn-warning">Browse Cars</a>
+                                <a href="{% url 'car_list' %}?availability=sale" class="btn btn-warning">Browse Cars</a>
                             </div>
                         </div>
                     </div>
@@ -502,7 +502,7 @@
                             <div>
                                 <h4 class="mb-3">Do You Want To Rent A Car?</h4>
                                 <p class="mb-3">Flexible rental options with daily, weekly, and monthly rates available</p>
-                                <a href="{% url 'cars:car_list' %}?availability=rent" class="btn btn-success">Browse Rentals</a>
+                                <a href="{% url 'car_list' %}?availability=rent" class="btn btn-success">Browse Rentals</a>
                             </div>
                         </div>
                     </div>
